@@ -82,7 +82,7 @@ This endpoint will lead to an error message.
 ```
 You need to complete your request as follow: Balances/@chain/@wallet
 ```
-* If the chain is uncorrect or unallowed:
+* If the chain is incorrect or unallowed:
 ```
 Thrown error: The chain parameter can only be "ethereum", "polygon" or "arbitrum" and you need to complete your request as follow: Balances/@chain/@wallet
 ```
