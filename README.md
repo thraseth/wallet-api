@@ -17,18 +17,6 @@ It uses the `CoinGecko` API to fetch the tokens metadatas and prices.
 * Alchemy-sdk
 * CoinGecko-API-v3
 
-## WARNINGS
-in order to properly use the Alchemy SDK and the coingecko API, you need to fix some broken/incomplete elements.
-
-### Alchemy endpoint
-* head to your node modules, then:
-`alchemy-sdk/dist/src/api/core-namespace.d.ts`
-* line 228 - change the type of the parameter `contractAddresses?: string[]` to `contractAddresses?: string[]|'erc20'` and save your changes
-
-### CoinGecko parameter
-* Still in your node modules:
-`coingecko-api-v3/dist/Enum.d.ts`
-* line 43: replace `'tron'` by `'polygon-pos' | 'arbitrum-one'`
 
 ## Getting Started
 Clone this repo:
@@ -41,6 +29,18 @@ Install dependencies:
  npm i
 ```
 
+### WARNINGS
+in order to properly use the Alchemy SDK and the coingecko API, you need to fix some broken/incomplete elements.
+
+#### Alchemy endpoint
+* head to your node modules, then:
+`alchemy-sdk/dist/src/api/core-namespace.d.ts`
+* line 228 - change the type of the parameter `contractAddresses?: string[]` to `contractAddresses?: string[]|'erc20'` and save your changes
+
+#### CoinGecko parameter
+* Still in your node modules:
+`coingecko-api-v3/dist/Enum.d.ts`
+* line 43: replace `'tron'` by `'polygon-pos' | 'arbitrum-one'`
 
 Start server:
 ```
