@@ -1,73 +1,93 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# REST API for erc20 tokens
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+This is a REST API to retrieve the list of erc20 tokens owned by a specific wallet on Ethereum(ETH), Polygon (MATIC) or Arbitrum
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+It uses `NestJS` with TypeScript and built-in express web framework.
+
+It uses the `Alchemy-sdk` build to fetch the wallet data.
+
+It uses the `CoinGecko` API to fetch the tokens metadatas and prices.
+
+## Dependencies
+
+* node
+* npm
+* typescript
+* nestJS
+* Alchemy-sdk
+* CoinGecko-API-v3
+
+
+## Getting Started
+Clone this repo:
+```
+git clone /*githubAddress*/ wallet-api && cd wallet-api
+```
+
+Install dependencies:
+```
+ npm i
+```
+
+Start server:
+```
+npm run start
+```
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+The REST API is described below.
 
-## Installation
+### Request the list of erc20 tokens
 
-```bash
-$ npm install
+`GET /Balances/@chain/@wallet`
+
+```
+Use the following HTTP instruction in your browser or your REST client (ex: insomnia.rest) : "http://localhost:3000/Balances/@chain/@wallet"
+Where:
+@chain - Is the chain you want to retrieve the wallet from. Can be "ethereum", "polygon" or "arbitrum"
+@wallet - Is the wallet address you want to retrieve the assets from
+example: "http://localhost:3000/Balances/ethereum/0xab5801a7d398351b8be11c439e05c5b3259aec9b"
 ```
 
-## Running the app
+### Wrong requests
 
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+`GET /Balances/@chain/@wallet`
+If the wallet contains no non-null token balance, it will output the following message:
+```
+There is no erc20 token for this address
 ```
 
-## Test
+if the wallet address does not respect the hexadecimal wallet address format, it will output the error thrown by the Alchemy SDK !
 
-```bash
-# unit tests
-$ npm run test
 
-# e2e tests
-$ npm run test:e2e
 
-# test coverage
-$ npm run test:cov
+`GET /Balances/@chain`
+This endpoint will lead to an error message.
+
+* If the chain is correct:
 ```
+You need to complete your request as follow: Balances/@chain/@wallet
+```
+* If the chain is uncorrect or unallowed:
+```
+Thrown error: The chain parameter can only be "ethereum", "polygon" or "arbitrum" and you need to complete your request as follow: Balances/@chain/@wallet
+```
+## Testing
 
-## Support
+You can run a test built with the NEST built-in JEST framework with that command line:
+`npm run test`
+This automated testing command should:
+* Try to retrieve erc20 assets from a given wallet address on our three allowed chains
+* Try again with a wrong chain name
+* Try again with a wallet wrong synthax
+* Try to reach the @chain endpoint 
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+## Further informations
 
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+* I chose to use the NestJS framework to get closer to production needs. 
+* I decided not to use the swagger module to keep a raw output and exploit the native possibilities of nestJS.
+* I decided to use the Alchemy sdk to fetch the on-chain data, and the coinGecko API for the tokens metadatas and their USD value.
+* I had to make a modification to the alchemy API to fix an endpoint (alchemy.core.getTokenBalances) that didn't allow filtering erc20 tokens. 
+* Since ETH is not an erc20, I did not include it in the response.
+* A minor limitation of the API is that some little known tokens may not be listed on coinGecko, so the API won't be able to display these tokens. A workaround could be to make an aggregator of APIs from tools like coinGecko to limit this kind of behaviour.
