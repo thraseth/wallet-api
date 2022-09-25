@@ -21,7 +21,7 @@ It uses the `CoinGecko` API to fetch the tokens metadatas and prices.
 ## Getting Started
 Clone this repo:
 ```
-git clone /*githubAddress*/ wallet-api && cd wallet-api
+git clone https://github.com/thraseth/wallet-api.git wallet-api && cd wallet-api
 ```
 
 Install dependencies:
